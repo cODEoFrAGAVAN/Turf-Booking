@@ -17,6 +17,7 @@ class Turf_registration_serializer(ModelSerializer):
                 'turf_username',
                 'turf_password',
                 'turf_starting_time',
-                'turf_ending_time']
+                'turf_ending_time',
+                'turf_available_games']
 
 

@@ -1,6 +1,7 @@
 from django.db import models
 from uuid import uuid4
 from django.utils import timezone
+from django.contrib.postgres.fields import ArrayField
 
 class Turf_registration(models.Model):
     turf_uuid = models.UUIDField(primary_key=True,default=uuid4())
@@ -13,7 +14,8 @@ class Turf_registration(models.Model):
     turf_mobile_number = models.CharField(max_length=10,unique=True,null=False)
     turf_alternate_mobile_number = models.CharField(max_length=10,default='',null=False)
     turf_land_line_number = models.CharField(max_length=30,default='',null=False)
-    turf_images_path = models.TextField(null=False)
+    turf_available_games = ArrayField(models.CharField(max_length=200),size=10,default=list)
+    turf_images_path = models.ImageField(null=False,upload_to='turf_images/')
     turf_username = models.CharField(max_length=20,unique=True,null=False)
     turf_password = models.CharField(max_length=128,null=False)
     turf_starting_time = models.CharField(max_length=10,null=False,default='6 A.M')
@@ -24,3 +26,4 @@ class Turf_registration(models.Model):
         return  self.turf_id
 
 
+# ["Cricket","Football"]

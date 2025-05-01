@@ -1,10 +1,14 @@
 import traceback
+from typing import MutableSet
 
 from django.core.serializers import serialize
 from django.shortcuts import render
+from rest_framework.status import HTTP_200_OK
+
 from .models import *
 from .serializers import *
 from rest_framework.generics import ListCreateAPIView
+from rest_framework.parsers import MultiPartParser,FormParser
 from rest_framework.response import Response
 from rest_framework import status
 import random
@@ -12,8 +16,9 @@ import string
 
 # Create your views here.
 class Turf_registration_process(ListCreateAPIView):
-    queryset = Turf_registration
+    queryset = Turf_registration.objects.all()
     serializer_class = Turf_registration_serializer
+    parser_classes = [MultiPartParser,FormParser]
 
     def turid_generation(self,length = 10)->str:
         try:
@@ -24,7 +29,7 @@ class Turf_registration_process(ListCreateAPIView):
             return "ERROR"
 
     def post(self, request, *args, **kwargs):
-        input_data = request.data
+        input_data = request.data.copy()
         turf_id:str = self.turid_generation()
         if turf_id.upper() == "ERROR":
             return Response(
@@ -34,7 +39,7 @@ class Turf_registration_process(ListCreateAPIView):
                 },status=status.HTTP_400_BAD_REQUEST
             )
         input_data['turf_id'] = turf_id
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=input_data)
         if serializer.is_valid():
             serializer.save()
             return Response(
@@ -49,5 +54,25 @@ class Turf_registration_process(ListCreateAPIView):
                     "error":serializer.errors
                 },status=status.HTTP_400_BAD_REQUEST
             )
+    def get(self,request,*args,**kwargs):
+        user_name = request.query_params.get('user_name', None)
+        if user_name:
+            turf_data = Turf_registration.objects.filter(turf_username=user_name)
+        else:
+            turf_data = Turf_registration.objects.all()
+        serializer = self.get_serializer(turf_data,many=True)
+        return Response({
+            "data":serializer.data,
+            "msg":"Success"
+        }
+            ,status=HTTP_200_OK
+        )
+        # else:
+        #     return  Response(
+        #         {
+        #             "msg":"Something went wrong. Please try again later.",
+        #             "error":serializer.errors
+        #         }
+        #     )
 
 
