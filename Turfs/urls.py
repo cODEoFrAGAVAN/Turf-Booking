@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path("registraion",Turf_registration_process.as_view())
+    path("registraion",Turf_registration_process.as_view()),
+    path("deletion",Turf_details_updation.as_view())
 ]
 
 

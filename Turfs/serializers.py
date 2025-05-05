@@ -4,20 +4,26 @@ from .models import *
 class Turf_registration_serializer(ModelSerializer):
     class Meta:
         model = Turf_registration
-        fields = ['turf_id',
-                'turf_name',
-                'turf_address',
-                'turf_pincode',
-                'turf_owner_name',
-                'turf_email_id',
-                'turf_mobile_number',
-                'turf_alternate_mobile_number',
-                'turf_land_line_number',
-                'turf_images_path',
-                'turf_username',
-                'turf_password',
-                'turf_starting_time',
-                'turf_ending_time',
-                'turf_available_games']
+        fields = '__all__'
+        # fields = ['turf_id',
+        #         'turf_name',
+        #         'turf_address',
+        #         'turf_pincode',
+        #         'turf_owner_name',
+        #         'turf_email_id',
+        #         'turf_mobile_number',
+        #         'turf_alternate_mobile_number',
+        #         'turf_land_line_number',
+        #         'turf_images_path',
+        #         'turf_username',
+        #         'turf_password',
+        #         'turf_starting_time',
+        #         'turf_ending_time',
+        #         'turf_available_games']
+
+class Turf_details_updation_serializers(ModelSerializer):
+        class Meta:
+                model = Turf_registration
+                fields = ['turf_id']
 
 
